@@ -1,19 +1,42 @@
+function test(ID, string)
 % parse GI recordings into a nice format and save
-clear, clc
+% variable input string determines input data: S: standard trials, C: hex, atropine, L: lidocaine
+clc
+
+if nargin < 1
+  ID = 2705;
+  string = 'S';
+elseif nargin < 2
+  if isstring(ID)
+    string = ID;
+    ID = 2705;
+  else
+    string = 'S';
+  end
+end
+
+loc = ['./Data/RatID_',num2str(ID),'/ID.',num2str(ID),' 1_9/'];
 
 % Constants
 CHANS = [3 4 5 7 8 9 10 11 12 13 14 15 17 18 19 20 21 22 23 24 25 27 28 29];
 REF = [1 2];
-LOAD_FOLDER = {'./Data/RatID_2705/ID.2705 1_9/standard_d1/' './Data/RatID_2705/ID.2705 1_9/standard_d2/' ...
-  './Data/RatID_2705/ID.2705 1_9/standard_d3/' './Data/RatID_2705/ID.2705 1_9/standard_d4/' './Data/RatID_2705/ID.2705 1_9/standard_d5/' ...
-  './Data/RatID_2705/ID.2705 1_9/standard_d6/' './Data/RatID_2705/ID.2705 1_9/standard_d7/' './Data/RatID_2705/ID.2705 1_9/standard_d8/' ...
-  './Data/RatID_2705/ID.2705 1_9/standard_d9/'};
-% LOAD_FOLDER = {'./Data/RatID_2705/ID.2705 1_9/lidocaineSNS_1/' './Data/RatID_2705/ID.2705 1_9/lidocaineSNS_2/' ...
-%   './Data/RatID_2705/ID.2705 1_9/lidocaineSNS_3/' './Data/RatID_2705/ID.2705 1_9/lidocaineSham_1/' ...
-%   './Data/RatID_2705/ID.2705 1_9/lidocaineSham_2/' './Data/RatID_2705/ID.2705 1_9/lidocaineSham_3/'};
-% LOAD_FOLDER = {'./Data/RatID_2705/ID.2705 1_9/atropine_1/' './Data/RatID_2705/ID.2705 1_9/atropine_2/' ...
-% './Data/RatID_2705/ID.2705 1_9/atropine_3/' './Data/RatID_2705/ID.2705 1_9/hexamethonium_1/' ...
-% './Data/RatID_2705/ID.2705 1_9/hexamethonium_2/' './Data/RatID_2705/ID.2705 1_9/hexamethonium_3/'};
+s = {[loc,'standard_d1/'] [loc,'standard_d2/'] [loc,'standard_d3/'] ...
+    [loc,'standard_d4/'] [loc,'standard_d5/'] [loc,'standard_d6/'] ...
+    [loc,'standard_d7/'] [loc,'standard_d8/'] [loc,'standard_d9/']};
+l = {[loc,'lidocaineSNS_1/'] [loc,'lidocaineSNS_2/'] [loc,'lidocaineSNS_3/'] ...
+    [loc,'lidocaineSham_1/'] [loc,'lidocaineSham_2/'] [loc,'lidocaineSham_3/'] };
+c = {[loc,'atropine_1/'] [loc,'atropine_2/'] [loc,'atropine_3/'] ...
+    [loc,'hexamethonium_1/'] [loc,'hexamethonium_2/'] [loc,'hexamethonium_3/'] };
+
+LOAD_FOLDER = [];
+lbl = {'S','L','C'};
+grp = {s, l, c};
+for i = 1:3
+  if max(lbl{i} == string)
+    LOAD_FOLDER = [LOAD_FOLDER grp{i}];
+  end
+end
+
 SAVEFILE = 'data/giData.mat';
 WINDOW_DURATION = 10; % seconds
 BASELINE_TIME = 30; % minutes
