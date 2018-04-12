@@ -1,5 +1,7 @@
+function save2Py(name)
+
 LOADFILE = 'data/giData.mat';
-SAVEFILE = 'data/pyData/notch14Data_C.json';
+SAVEFILE = ['data/pyData/',name,'.json'];
 
 load(LOADFILE, 'pxx', 'labels', 'dataOpts')
 
