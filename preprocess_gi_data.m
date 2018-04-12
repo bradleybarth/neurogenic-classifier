@@ -1,4 +1,4 @@
-function preprocess_gi_data(saveFile,dataOpts)
+function preprocess_gi_data(saveFile,dataOpts,notch14)
 % preprocessData
 %   Preprocesses data saved in saveFile 3.16.2018 add 14Hz notch filter.
 %   INPUTS
@@ -47,6 +47,9 @@ function preprocess_gi_data(saveFile,dataOpts)
 if nargin < 2
   % input/data preprocessing parameters
   dataOpts = [];
+  notch14 = true;
+elseif nargin < 3
+    notch14 = true;
 end
 dataOpts = fillDefaultDopts(dataOpts);
 
@@ -87,17 +90,19 @@ for d = 1:nSegments
     xNotchFiltered = filtfilt(sos,g,xNotchFiltered);
   end
   
-    % 14Hz notch filters (+harmonics)
-  xNotchFiltered = double(thisData);
-  for f = 14:14:dataOpts.highFreq
-    Wp = [(f-1) (f+1)]*2/fs; % passband
-    Ws = [(f-0.25) (f+0.25)]*2/fs; % stopband
-    Rp = 0.5; % Max Passband distortion
-    Rs = 30; % Min stopband attenuation
-    [n,Wn] = buttord(Wp,Ws,Rp,Rs);
-    [z,p,k] =  butter(n,Wn,'stop');
-    [sos,g] = zp2sos(z,p,k);
-    xNotchFiltered = filtfilt(sos,g,xNotchFiltered);
+  if notch14
+        % 14Hz notch filters (+harmonics)
+      xNotchFiltered = double(thisData);
+      for f = 14:14:dataOpts.highFreq
+        Wp = [(f-1) (f+1)]*2/fs; % passband
+        Ws = [(f-0.25) (f+0.25)]*2/fs; % stopband
+        Rp = 0.5; % Max Passband distortion
+        Rs = 30; % Min stopband attenuation
+        [n,Wn] = buttord(Wp,Ws,Rp,Rs);
+        [z,p,k] =  butter(n,Wn,'stop');
+        [sos,g] = zp2sos(z,p,k);
+        xNotchFiltered = filtfilt(sos,g,xNotchFiltered);
+      end
   end
   
   % subsample (using custom function based off 'decimate')
