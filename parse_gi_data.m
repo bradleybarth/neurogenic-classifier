@@ -1,17 +1,16 @@
-function test(ID, string)
+function parse_gi_data(ID, str)
 % parse GI recordings into a nice format and save
 % variable input string determines input data: S: standard trials, C: hex, atropine, L: lidocaine
-clc
 
 if nargin < 1
   ID = 2705;
-  string = 'S';
+  str = 'S';
 elseif nargin < 2
   if isstring(ID)
-    string = ID;
+    str = ID;
     ID = 2705;
   else
-    string = 'S';
+    str = 'S';
   end
 end
 
@@ -24,15 +23,23 @@ s = {[loc,'standard_d1/'] [loc,'standard_d2/'] [loc,'standard_d3/'] ...
     [loc,'standard_d4/'] [loc,'standard_d5/'] [loc,'standard_d6/'] ...
     [loc,'standard_d7/'] [loc,'standard_d8/'] [loc,'standard_d9/']};
 l = {[loc,'lidocaineSNS_1/'] [loc,'lidocaineSNS_2/'] [loc,'lidocaineSNS_3/'] ...
-    [loc,'lidocaineSham_1/'] [loc,'lidocaineSham_2/'] [loc,'lidocaineSham_3/'] };
+    [loc,'lidocaineSham_1/'] [loc,'lidocaineSham_2/'] [loc,'lidocaineSham_3/']};
 c = {[loc,'atropine_1/'] [loc,'atropine_2/'] [loc,'atropine_3/'] ...
-    [loc,'hexamethonium_1/'] [loc,'hexamethonium_2/'] [loc,'hexamethonium_3/'] };
+    [loc,'hexamethonium_1/'] [loc,'hexamethonium_2/'] [loc,'hexamethonium_3/']};
+if ID == 3402
+    s = {[loc,'standard_d1/'] [loc,'standard_d2/'] [loc,'standard_d3/'] ...
+        [loc,'standard_d4/'] [loc,'standard_d5/'] [loc,'standard_d6/']};
+    l = {[loc,'lidocaineSNS_1/'] [loc,'lidocaineSNS_2/'] ...
+        [loc,'lidocaineSham_1/']};
+    c = {[loc,'atropine_1/'] [loc,'atropine_2/'] ...
+        [loc,'hexamethonium_1/'] [loc,'hexamethonium_2/']};
+end
 
 LOAD_FOLDER = [];
 lbl = {'S','L','C'};
 grp = {s, l, c};
 for i = 1:3
-  if max(lbl{i} == string)
+  if max(lbl{i} == str)
     LOAD_FOLDER = [LOAD_FOLDER grp{i}];
   end
 end
@@ -120,7 +127,6 @@ for f = 1:numel(LOAD_FOLDER)
                         stimOff'];
     labels.allWindows.windowID = [labels.allWindows.windowID; ...
                         ((1:W)+(k-3)*6)'];
-    disp([f 99 ((1:W)+(k-3)*6)])
     
     % add subject name to labels
     subjectID = cell(W, 1);

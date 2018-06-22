@@ -1,4 +1,4 @@
-function preprocess_gi_data(saveFile,dataOpts,notch14)
+function preprocess_gi_data(notch14)
 % preprocessData
 %   Preprocesses data saved in saveFile 3.16.2018 add 14Hz notch filter.
 %   INPUTS
@@ -44,15 +44,9 @@ function preprocess_gi_data(saveFile,dataOpts,notch14)
 %       start and end times for windows associated with segment P in
 %       dataSegments. W is the # of windows in segment P.
 
-if nargin < 2
-  % input/data preprocessing parameters
-  dataOpts = [];
-  notch14 = true;
-elseif nargin < 3
-    notch14 = true;
-end
+dataOpts = [];
 dataOpts = fillDefaultDopts(dataOpts);
-
+saveFile = 'data/giData.mat';
 load(saveFile, 'labels', 'rawData', 'rawWindowTimes')
 
 %initialize some variables
