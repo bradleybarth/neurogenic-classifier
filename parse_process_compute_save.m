@@ -3,7 +3,7 @@ function parse_process_compute_save(ID, notch14)
 % ID refers to specimen number (Rat_ID), and notch14 is a boolean to apply 
 % a notch filter at 14 Hz, or not
 
-lbl = {'S','L','C'};
+lbl = {'S'};%,'L','C'};
 for i = 1:3
     parse_gi_data(ID, lbl{i})
     disp([lbl{i},': parsed '])
