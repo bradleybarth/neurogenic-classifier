@@ -17,7 +17,11 @@ end
 loc = ['./Data/RatID_',num2str(ID),'/ID.',num2str(ID),' 1_9/'];
 
 % Constants
-CHANS = [3 4 5 7 8 9 10 11 12 13 14 15 17 18 19 20 21 22 23 24 25 27 28 29];
+%CHANS = [3 4 5 7 8 9 10 11 12 13 14 15 17 18 19 20 21 22 23 24 25 27 28 29];
+% ---- need to repeat all Granger analyses as of 10/03/2018 ------------- %
+% pinout suggests channel 5 is also connected, however, impedance
+% measurements in 5603 suggest this channel is not connected.
+CHANS = [4 6 8 9 10 11 12 13 14 15 18 19 20 21 22 23 24 25 26 28 29 30];
 REF = [1 2];
 s = {[loc,'standard_d1/'] [loc,'standard_d2/'] [loc,'standard_d3/'] ...
     [loc,'standard_d4/'] [loc,'standard_d5/'] [loc,'standard_d6/'] ...
@@ -33,6 +37,15 @@ if ID == 3402
         [loc,'lidocaineSham_1/']};
     c = {[loc,'atropine_1/'] [loc,'atropine_2/'] ...
         [loc,'hexamethonium_1/'] [loc,'hexamethonium_2/']};
+end
+if ID == 5603
+    s = {[loc,'standard_d1/'] [loc,'standard_d2/'] [loc,'standard_d3/'] ...
+        [loc,'standard_d4/'] [loc,'standard_d5/'] [loc,'standard_d6/']...
+        [loc,'standard_d7/']};
+    l = {[loc,'lidocaineSNS_1/'] [loc,'lidocaineSNS_2/'] [loc,'lidocaineSNS_3/'] ...
+        [loc,'lidocaineSham_1/'] [loc,'lidocaineSham_2/'] [loc,'lidocaineSham_3/']};
+    c = {[loc,'atropine_1/'] [loc,'atropine_2/'] [loc,'atropine_3/']...
+        [loc,'hexamethonium_1/']};
 end
 
 LOAD_FOLDER = [];
